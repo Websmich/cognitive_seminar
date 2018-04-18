@@ -12,8 +12,12 @@ namespace SeminarApp.Controllers
 {
     public class HomeController : Controller
     {
+        CognitiveServiceHandler _handler;
 
-        private static string SUBSCRIPTION_KEY = "0f490b17c8eb40d38616b51c3be9d170";
+        public HomeController()
+        {
+            _handler = new CognitiveServiceHandler();
+        }
 
         public IActionResult Index()
         {
@@ -22,33 +26,7 @@ namespace SeminarApp.Controllers
 
         public IActionResult Translate(String translateWord)
         {
-            // First, create the client 
-            ITextAnalyticsAPI client = new TextAnalyticsAPI();
-
-            client.AzureRegion = AzureRegions.Westcentralus;
-
-            client.SubscriptionKey = SUBSCRIPTION_KEY;
-
-            LanguageBatchResult result = client.DetectLanguage(
-                new BatchInput(
-                    new List<Input>()
-                    {
-                        new Input("1", translateWord)
-                    }));
-
-            // transform the results into a recognizeable model
-
-            TranslatedItem word = new TranslatedItem { OrignalWord = translateWord, DetectedLanguage = result.Documents[0].DetectedLanguages[0].Name, NonEnglishWord = false};
-
-
-            // If the word is NOT in english, translate it automatically
-            if (result.Documents[0].DetectedLanguages[0].Name != "English")
-            {
-                String shortFormName = result.Documents[0].DetectedLanguages[0].Iso6391Name;
-                word.NonEnglishWord = true;
-            }
-
-
+            TranslatedItem word = _handler.DetectLanguage(translateWord);
             return View(word);
         }
 

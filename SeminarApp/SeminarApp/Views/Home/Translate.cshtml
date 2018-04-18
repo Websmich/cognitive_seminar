@@ -1,0 +1,20 @@
+﻿@using SeminarApp.Models
+
+@model TranslatedItem;
+
+@{
+    ViewData["Title"] = "Translate";
+}
+
+
+
+<h2>Translate</h2>
+
+<p><label>Original Word: </label> @Model.OrignalWord</p>
+<p><label>Detected Language: </label> @Model.DetectedLanguage</p>
+
+<a asp-action="index">Home</a>
+
+
+
+

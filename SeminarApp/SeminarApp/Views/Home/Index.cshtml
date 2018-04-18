@@ -3,9 +3,26 @@
 }
 
 <div>
-    <h1>Translate Service</h1>
-    <form asp-controller="Home" asp-action="Translate">
-        <input name="translateWord"/>
-        <input type="submit" value="Translate" />
-    </form>
+    <div class="row">
+        <div class="col-md-6">
+            <h1>Language Detection Service</h1>
+            <form asp-controller="Home" asp-action="Translate">
+                <input name="translateWord" />
+                <input type="submit" value="Detect Language" />
+            </form>
+        </div>
+        <div class="col-md-6">
+            <h1>Sentiment Analysis</h1>
+            <form asp-controller="Home" asp-action="Sentiment">
+                <input name="word"/>
+                <input type="submit" value="Analyze Sentiment"/>
+            </form>
+        </div>
+    </div>
+    <br />
+    <br />
+    <div class="row text-center">
+        <a class="btn btn-success">Go to real life example</a>
+    </div>
 </div>
+
