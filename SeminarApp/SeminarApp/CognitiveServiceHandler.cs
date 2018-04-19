@@ -12,16 +12,19 @@ namespace SeminarApp
     {
         private static string SUBSCRIPTION_KEY = "0f490b17c8eb40d38616b51c3be9d170";
 
+        ITextAnalyticsAPI _client;
+
+        public CognitiveServiceHandler()
+        {
+            // initialize client
+            _client = new TextAnalyticsAPI();
+            _client.AzureRegion = AzureRegions.Westcentralus;
+            _client.SubscriptionKey = SUBSCRIPTION_KEY;
+        }
+
         public TranslatedItem DetectLanguage(String wordToDetect)
         {
-            // First, create the client 
-            ITextAnalyticsAPI client = new TextAnalyticsAPI();
-
-            client.AzureRegion = AzureRegions.Westcentralus;
-
-            client.SubscriptionKey = SUBSCRIPTION_KEY;
-
-            LanguageBatchResult result = client.DetectLanguage(
+            LanguageBatchResult result = _client.DetectLanguage(
                 new BatchInput(
                     new List<Input>()
                     {
@@ -30,7 +33,7 @@ namespace SeminarApp
 
             // transform the results into a recognizeable model
 
-            TranslatedItem word = new TranslatedItem { OrignalWord = wordToDetect, DetectedLanguage = result.Documents[0].DetectedLanguages[0].Name, NonEnglishWord = false };
+            TranslatedItem word = new TranslatedItem { OrignalWord = wordToDetect, DetectedLanguage = result.Documents[0].DetectedLanguages[0].Name, NonEnglishWord = false, ISOName = result.Documents[0].DetectedLanguages[0].Iso6391Name };
 
             if (result.Documents[0].DetectedLanguages[0].Name != "English")
             {
@@ -38,6 +41,23 @@ namespace SeminarApp
             }
 
             return word;
+        }
+
+        public EvaluatedSentiment SentimentEvaluation(string word)
+        {
+            // Translate the sentence to detect what lgnauge it is
+
+            TranslatedItem sentence = DetectLanguage(word);
+
+            SentimentBatchResult result = _client.Sentiment(
+                    new MultiLanguageBatchInput(
+                        new List<MultiLanguageInput>()
+                        {
+                          new MultiLanguageInput(sentence.ISOName, "0", sentence.OrignalWord),
+                        }));
+
+            EvaluatedSentiment sentiment = new EvaluatedSentiment { Sentence = word, Score = (double)result.Documents[0].Score * 100 };
+            return sentiment;
         }
     }
 }

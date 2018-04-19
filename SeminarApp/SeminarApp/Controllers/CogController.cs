@@ -25,9 +25,9 @@ namespace SeminarApp.Controllers
         }
 
         [HttpPost]
-        public double SentimentEvaluation(string word)
+        public EvaluatedSentiment SentimentEvaluation(string word)
         {
-            return 0.1;
+            return _handler.SentimentEvaluation(word);
         }
     }
 }

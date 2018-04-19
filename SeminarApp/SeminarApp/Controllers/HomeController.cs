@@ -30,5 +30,11 @@ namespace SeminarApp.Controllers
             return View(word);
         }
 
+        public IActionResult Sentiment(String sentence)
+        {
+            EvaluatedSentiment sentiment = _handler.SentimentEvaluation(sentence);
+            return View(sentiment);
+        }
+
     }
 }

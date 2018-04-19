@@ -1,0 +1,16 @@
+﻿@using SeminarApp.Models
+
+@model EvaluatedSentiment;
+
+@{
+    ViewData["Title"] = "Sentiment";
+}
+
+<h2>Evaluated Sentiment</h2>
+
+<p><label>Sentence: </label> @Model.Sentence</p>
+<p><label>Sentiment Score: </label> @Model.Score%</p>
+<p><i>@Model.SentimentOpinion</i></p>
+
+<a asp-action="index">Home</a>
+

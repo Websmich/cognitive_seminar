@@ -13,5 +13,7 @@ namespace SeminarApp.Models
         public String DetectedLanguage { get; set; }
 
         public Boolean NonEnglishWord { get; set; }
+
+        public string ISOName { get; set; }
     }
 }
